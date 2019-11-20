@@ -383,8 +383,6 @@ class Particle():
             self.y = y
             self.heading = heading
 
-    '''def childDetected(self):
-        return self.food >= self.foodTrH'''
 
     def share(self):
         for elem in model.arrOrganism:
@@ -486,13 +484,7 @@ if __name__ == "__main__":
     app.run()
 
     N = 0
-    pygame.init()
-    screen = pygame.display.set_mode(SIZE)
-    screen.fill(CL)
-    pygame.display.update()
     Skip = False
-
-    clock = pygame.time.Clock()
     TrailMap = np.zeros((SIZE[1], SIZE[0]))
     FoodMap = np.zeros((SIZE[1], SIZE[0]))
     model = Modeling(1)
@@ -519,11 +511,6 @@ if __name__ == "__main__":
                     makeCircle(pygame.mouse.get_pos(), 'FOOD')
                 else:
                     makeCircle(pygame.mouse.get_pos(), 'WASTE')
-            '''elif i.type == pygame.KEYDOWN:
-                if Skip == False:
-                    Skip = True
-                else:
-                    Skip = False'''
 
         for y in range(TrailMap.shape[0]):
             for x in range(TrailMap.shape[1]):
