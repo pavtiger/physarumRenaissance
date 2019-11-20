@@ -4,7 +4,7 @@ using namespace std;
 const int h = 500;
 const int w = 500;
 const int l = 500;
-const lengh = 10;
+const GLuint lengh = 10;
 
 /*
 int SIZE = [600, 500, 400];
@@ -36,9 +36,9 @@ public:
 
 class particle { // частица
 public: // параметры
-    int SA = 45;
-    int RA = 20;
-    int SO = 9;
+    GLint SA = 45;
+    GLint RA = 20;
+    int SO = 9
     int SS = 0.5;
     int depT = 5;
     int pCD = 0;
@@ -86,24 +86,22 @@ public: // параметры
 
 
 int main() {
-    int TrailMap[h][l][w] // след, препятствия
-    int FoodMap[h][l][w] // еда
+    int TrailMap[l][w] // след, препятствия
+    inе FoodMap[l][w] // еда
 
     while (!done) {
         // read mouse
-        for (int z = 0; z < h; ++z) {
-            for (int y = 0; y < l; ++y) {
-                for (int x = 0; x <= w; ++x) {
-                    int value = FoodMap[z][y][x];
-                    if (value > 0) {
-                        // draw green
-                    } else if (value < 0) {
-                        // draw red
-                    }
+        for (int y = 0; y < l; ++y) {
+            for (int x = 0; x <= w; ++x) {
+                int value = FoodMap[z][y][x];
+                if (value > 0) {
+                    // draw green
+                } else if (value < 0) {
+                    // draw red
                 }
             }
         }
-
+        
         for (int p = 0; p < lengh; ++p) {
             model.arr
         }
