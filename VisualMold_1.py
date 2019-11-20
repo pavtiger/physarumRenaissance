@@ -234,25 +234,22 @@ class Canvas(app.Canvas):
         ps = self.pixel_scale
 
         # Create vertices
-        ar = []
-        for elem in model.arrOrganism:
-            ar.append([elem.x, elem.y, 0])
-
-        n = 1000
-        data = np.zeros(n, [('a_position', np.float32, 3),
+        #n = 1000
+        '''self.data = np.zeros(n, [('a_position', np.float32, 3),
                             ('a_bg_color', np.float32, 4),
                             ('a_fg_color', np.float32, 4),
-                            ('a_size', np.float32)])
+                            ('a_size', np.float32)])'''
 
-        data['a_position'] = ar
-        data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
+        #data['a_position'] = elem[]
+        '''self.data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
         data['a_fg_color'] = 0, 0, 0, 1
         data['a_size'] = np.random.uniform(5*ps, 10*ps, n)
         u_linewidth = 1.0
-        u_antialias = 1.0
+        u_antialias = 1.0'''
 
         self.translate = 5
         self.program = gloo.Program(vert, frag)
+        self.program['a_position']
         self.view = translate((0, 0, -self.translate))
         self.model = np.eye(4, dtype=np.float32)
         self.projection = np.eye(4, dtype=np.float32)
@@ -277,20 +274,10 @@ class Canvas(app.Canvas):
 
 
     def drawOutput(self):
+        ar = []
         for elem in model.arrOrganism:
-            for chek in START_POINT:
-                dx = math.fabs(elem.x - chek[0])
-                dy = math.fabs(elem.y - chek[1])
-                if math[300, 300].sqrt(dx * dx + dy * dy) <= 5:
-                    elem.food = 255
-
-            # Draw particle
-            if QUALITY == 'LOW':
-                pygame.draw.circle(screen, (0 + elem.food, int(55 + elem.food / 1.275), int(255 - elem.food / 5.1)),
-                                   (int(elem.x), int(elem.y)), 2, 1)
-            elif QUALITY == 'HIGH':
-                pygame.draw.circle(screen, (0 + elem.food, int(55 + elem.food / 1.275), int(255 - elem.food / 5.1)),
-                                   (int(elem.x), int(elem.y)), 0, 0)
+            ar.append([elem.x, elem.y, elem.z])
+        data['a_position'] = ar
 
 
     def on_key_press(self, event):
@@ -335,36 +322,19 @@ class Canvas(app.Canvas):
 class Particle():
     def __init__(self, x, y, z, heading = random.randint(0, 360)):
         """Constructor"""
-        if QUALITY == 'LOW':
-            self.SA = 45
-            self.RA = 20
-            self.SO = 9
-            self.SS = 0.5
-            self.depT = 5
-            self.pCD = 0
-            self.sMin = 0
-            self.food = 255
-            self.foodTrH = 20
-            self.x = x
-            self.y = y
-            self.z = z
-            self.heading = heading
-
-        elif QUALITY == 'HIGH':
-            self.SA = 45
-            self.RA = 20
-            self.SO = 5
-            self.SS = 0.5
-            self.depT = 5
-            self.pCD = 0
-            self.sMin = 0
-            self.food = 255
-            self.foodTrH = 20
-            self.x = x
-            self.y = y
-            self.z = z
-            self.heading = heading
-
+        self.SA = 45
+        self.RA = 20
+        self.SO = 9
+        self.SS = 0.5
+        self.depT = 5
+        self.pCD = 0
+        self.sMin = 0
+        self.food = 255
+        self.foodTrH = 20
+        self.x = x
+        self.y = y
+        self.z = z
+        self.heading = heading
 
     def share(self):
         for elem in model.arrOrganism:
@@ -397,8 +367,6 @@ class Particle():
         if Skip == False and FoodMap[int(self.y + dy), int(self.x + dx)] >= 0:
             self.x += dx
             self.y += dy
-        else:
-            print('hello')
 
     def rotate(self, ans):
         if ans[0][1] > 0 or ans[2][1] > 0:
@@ -475,7 +443,7 @@ if __name__ == "__main__":
     FoodMap = np.zeros((SIZE[1], SIZE[0]))
     Count = 1
 
-    def makeCircle(p, type, s = 20):
+    '''def makeCircle(p, type, s = 20):
         for i in range(s):
             for angl in range(360):
                 dx = math.sin(math.radians(angl)) * i
@@ -483,7 +451,7 @@ if __name__ == "__main__":
                 if type == 'FOOD':
                     FoodMap[int(p[1] + dy), int(p[0] + dx)] = 255 - (i * 255/s)
                 else:
-                    FoodMap[int(p[1] + dy), int(p[0] + dx)] = 255 - (9-1 * i * 255/s)
+                    FoodMap[int(p[1] + dy), int(p[0] + dx)] = 255 - (9-1 * i * 255/s)'''
 
 
     done = False
@@ -517,19 +485,19 @@ if __name__ == "__main__":
 
         model.locationUpdate(Count)
         c.drawOutput()
-        for elem in START_POINT:
-            pygame.draw.circle(screen, (200, 0, 0), (elem[0], elem[1]), 6, 3) # Start Point
+        #for elem in START_POINT:
+        #    pygame.draw.circle(screen, (200, 0, 0), (elem[0], elem[1]), 6, 3) # Start Point
 
 
         for i in range(LENGH):
             for point in START_POINT:
-                model.arrOrganism.append(Particle(x=point[0], y=point[1], heading=random.randint(0, ANGLE)))
+                model.arrOrganism.append(Particle(x=point[0], y=point[1], z=point[2], heading=random.randint(0, ANGLE)))
                 Count += 1
                 print(f'--{Count}--')
 
         pygame.display.set_caption(str(Count) + ' Particles')
 
-        pygame.image.save(screen, 'screens/file-' + str(N) + '.png')
+        # pygame.image.save(screen, 'screens/file-' + str(N) + '.png')
         N += 1   
         pygame.display.update()
         screen.fill(CL)
