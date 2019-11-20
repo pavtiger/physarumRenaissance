@@ -77,31 +77,27 @@ varying float v_antialias;
 // Functions
 // ------------------------------------
 // ----------------
-float disc(vec2 P, float size)
-{
+float disc(vec2 P, float size) {
     float r = length((P.xy - vec2(0.5,0.5))*size);
     r -= v_size/2.;
     return r;
 }
 // ----------------
-float arrow_right(vec2 P, float size)
-{
+float arrow_right(vec2 P, float size) {
     float r1 = abs(P.x -.50)*size + abs(P.y -.5)*size - v_size/2.;
     float r2 = abs(P.x -.25)*size + abs(P.y -.5)*size - v_size/2.;
     float r = max(r1,-r2);
     return r;
 }
 // ----------------
-float ring(vec2 P, float size)
-{
+float ring(vec2 P, float size) {
     float r1 = length((P.xy - vec2(0.5,0.5))*size) - v_size/2.;
     float r2 = length((P.xy - vec2(0.5,0.5))*size) - v_size/4.;
     float r = max(r1,-r2);
     return r;
 }
 // ----------------
-float clober(vec2 P, float size)
-{
+float clober(vec2 P, float size) {
     const float PI = 3.14159265358979323846264;
     const float t1 = -PI/2.;
     const vec2  c1 = 0.2*vec2(cos(t1),sin(t1));
@@ -119,23 +115,20 @@ float clober(vec2 P, float size)
     return r;
 }
 // ----------------
-float square(vec2 P, float size)
-{
+float square(vec2 P, float size) {
     float r = max(abs(P.x -.5)*size,
                   abs(P.y -.5)*size);
     r -= v_size/2.;
     return r;
 }
 // ----------------
-float diamond(vec2 P, float size)
-{
+float diamond(vec2 P, float size) {
     float r = abs(P.x -.5)*size + abs(P.y -.5)*size;
     r -= v_size/2.;
     return r;
 }
 // ----------------
-float vbar(vec2 P, float size)
-{
+float vbar(vec2 P, float size) {
     float r1 = max(abs(P.x -.75)*size,
                    abs(P.x -.25)*size);
     float r3 = max(abs(P.x -.5)*size,
@@ -145,8 +138,7 @@ float vbar(vec2 P, float size)
     return r;
 }
 // ----------------
-float hbar(vec2 P, float size)
-{
+float hbar(vec2 P, float size) {
     float r2 = max(abs(P.y -.75)*size,
                    abs(P.y -.25)*size);
     float r3 = max(abs(P.x -.5)*size,
@@ -156,8 +148,7 @@ float hbar(vec2 P, float size)
     return r;
 }
 // ----------------
-float cross(vec2 P, float size)
-{
+float cross(vec2 P, float size) {
     float r1 = max(abs(P.x -.75)*size,
                    abs(P.x -.25)*size);
     float r2 = max(abs(P.y -.75)*size,
@@ -170,8 +161,7 @@ float cross(vec2 P, float size)
 }
 // Main
 // ------------------------------------
-void main()
-{
+void main() {
     float size = v_size +2.0*(v_linewidth + 1.5*v_antialias);
     float t = v_linewidth/2.0-v_antialias;
     float r = disc(gl_PointCoord, size);
@@ -184,16 +174,12 @@ void main()
     // float r = hbar(gl_PointCoord, size);
     // float r = vbar(gl_PointCoord, size);
     float d = abs(r) - t;
-    if( r > (v_linewidth/2.0+v_antialias))
-    {
+    if( r > (v_linewidth/2.0+v_antialias)) {
         discard;
     }
-    else if( d < 0.0 )
-    {
+    else if( d < 0.0 ) {
        gl_FragColor = v_fg_color;
-    }
-    else
-    {
+    } else {
         float alpha = d/v_antialias;
         alpha = exp(-alpha*alpha);
         if (r > 0.)
