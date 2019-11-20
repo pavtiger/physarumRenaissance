@@ -9,7 +9,7 @@ import math
 from PIL import Image
 import matplotlib.pyplot as plt
 
-START_POINT = [[300, 300]]
+START_POINT = [[0, 0, 0]]
 QUALITY = 'LOW'
 
 if QUALITY == 'LOW':
@@ -196,14 +196,14 @@ class Modeling():
     def __init__(self, trsCount = 1):
         self.trsCount = trsCount
         for item in START_POINT:
-            self.arrOrganism = [Particle(item[0], item[1]) for i in range(trsCount)]
+            self.arrOrganism = [Particle(item[0], item[1], item[2]) for i in range(trsCount)]
 
     def drawOutput(self, screen):
         for elem in self.arrOrganism:
             for chek in START_POINT:
                 dx = math.fabs(elem.x - chek[0])
                 dy = math.fabs(elem.y - chek[1])
-                if math.sqrt(dx*dx + dy*dy) <= 5:
+                if math[300, 300].sqrt(dx*dx + dy*dy) <= 5:
                     elem.food = 255
 
             # Draw particle
@@ -247,16 +247,22 @@ class Modeling():
 class Canvas(app.Canvas):
 
     def __init__(self):
-        app.Canvas.__init__(self, keys='interactive', size=(800, 600))
+        model = Modeling(1)
+        app.Canvas.__init__(self, keys='interactive', title='test', size=(800, 600))
         ps = self.pixel_scale
 
         # Create vertices
-        n = 1000000
+        ar = []
+        for elem in model.arrOrganism:
+            ar.append([elem.x, elem.y, 0])
+
+        n = 1000
         data = np.zeros(n, [('a_position', np.float32, 3),
                             ('a_bg_color', np.float32, 4),
                             ('a_fg_color', np.float32, 4),
                             ('a_size', np.float32)])
-        data['a_position'] = 0.45 * np.random.randn(n, 3)
+
+        data['a_position'] = ar
         data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
         data['a_fg_color'] = 0, 0, 0, 1
         data['a_size'] = np.random.uniform(5*ps, 10*ps, n)
@@ -325,9 +331,8 @@ class Canvas(app.Canvas):
         self.program['u_projection'] = self.projection
 
 
-
 class Particle():
-    def __init__(self, x, y, heading = random.randint(0, 360)):
+    def __init__(self, x, y, z, heading = random.randint(0, 360)):
         """Constructor"""
         if QUALITY == 'LOW':
             self.SA = 45
@@ -341,6 +346,7 @@ class Particle():
             self.foodTrH = 20
             self.x = x
             self.y = y
+            self.z = z
             self.heading = heading
 
         elif QUALITY == 'HIGH':
@@ -355,6 +361,7 @@ class Particle():
             self.foodTrH = 20
             self.x = x
             self.y = y
+            self.z = z
             self.heading = heading
 
 
@@ -432,17 +439,20 @@ class Particle():
         dx1 = int(math.sin(math.radians(self.heading + self.SA)) * self.SO)
         dy1 = int(math.cos(math.radians(self.heading + self.SA)) * self.SO)
         if SENSORS:
-            pygame.draw.circle(screen, (0, 0, 0), (int(self.x + dx1), int(self.y + dy1)), 0, 0)
+            # pygame.draw.circle(screen, (0, 0, 0), (int(self.x + dx1), int(self.y + dy1)), 0, 0)
+            pass
         """SENTER"""
         dx2 = int(math.sin(math.radians(self.heading)) * self.SO)
         dy2 = int(math.cos(math.radians(self.heading)) * self.SO)
         if SENSORS:
-            pygame.draw.circle(screen, (0, 0, 0), (int(self.x + dx2), int(self.y + dy2)), 0, 0)
+            # pygame.draw.circle(screen, (0, 0, 0), (int(self.x + dx2), int(self.y + dy2)), 0, 0)
+            pass
         """RIGHT"""
         dx3 = int(math.sin(math.radians(self.heading - self.SA)) * self.SO)
         dy3 = int(math.cos(math.radians(self.heading - self.SA)) * self.SO)
         if SENSORS:
-           pygame.draw.circle(screen, (0, 0, 0), (int(self.x + dx3), int(self.y + dy3)), 0, 0)
+            # pygame.draw.circle(screen, (0, 0, 0), (int(self.x + dx3), int(self.y + dy3)), 0, 0)
+            pass
         try:
             element0 = [TrailMap[int(self.y + dy1), int(self.x + dx1)], FoodMap[int(self.y + dy1), int(self.x + dx1)]]
             element1 = [TrailMap[int(self.y + dy2), int(self.x + dx2)], FoodMap[int(self.y + dy2), int(self.x + dx2)]]
@@ -461,7 +471,7 @@ if __name__ == "__main__":
     Skip = False
     TrailMap = np.zeros((SIZE[1], SIZE[0]))
     FoodMap = np.zeros((SIZE[1], SIZE[0]))
-    model = Modeling(1)
+    # model = Modeling(1)
     Count = 1
 
     def makeCircle(p, type, s = 20):
@@ -477,23 +487,23 @@ if __name__ == "__main__":
 
     done = False
     while not done:
-        for i in pygame.event.get():
+        '''for i in pygame.event.get():
             if i.type == pygame.QUIT:
                 done = True
             elif i.type == pygame.MOUSEBUTTONDOWN:
                 if i.button == 1:
                     makeCircle(pygame.mouse.get_pos(), 'FOOD')
                 else:
-                    makeCircle(pygame.mouse.get_pos(), 'WASTE')
+                    makeCircle(pygame.mouse.get_pos(), 'WASTE')'''
 
         for y in range(TrailMap.shape[0]):
             for x in range(TrailMap.shape[1]):
                 if FoodMap[y, x] > 0:
                     value = FoodMap[y, x]
-                    pygame.draw.circle(screen, (255 - value, 255, 255 - value), (x, y), 0, 0)
+                    # pygame.draw.circle(screen, (255 - value, 255, 255 - value), (x, y), 0, 0)
                 elif FoodMap[y, x] < 0:
                     value = math.fabs(FoodMap[y, x])
-                    pygame.draw.circle(screen, (255-value, 255-value, 255-value), (x, y), 1, 0)
+                    # pygame.draw.circle(screen, (255-value, 255-value, 255-value), (x, y), 1, 0)
 
                 if TrailMap[y, x] >= 8:
                     TrailMap[y, x] -= 8
@@ -501,7 +511,7 @@ if __name__ == "__main__":
                         value = TrailMap[y, x]
                         if value > 255:
                             value = 255
-                        pygame.draw.circle(screen, (255 - value, 255 - value, 255 - value), (x, y), 0, 0)
+                        # pygame.draw.circle(screen, (255 - value, 255 - value, 255 - value), (x, y), 0, 0)
 
 
         model.locationUpdate(Count)
