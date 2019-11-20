@@ -232,6 +232,9 @@ class Canvas(app.Canvas):
     def __init__(self):
         app.Canvas.__init__(self, keys='interactive', title='test', size=(800, 600))
         ps = self.pixel_scale
+        ar = []
+        for elem in model.arrOrganism:
+            ar.append([elem.x, elem.y, 0])
 
         # Create vertices
         #n = 1000
@@ -239,7 +242,6 @@ class Canvas(app.Canvas):
                             ('a_bg_color', np.float32, 4),
                             ('a_fg_color', np.float32, 4),
                             ('a_size', np.float32)])'''
-
         #data['a_position'] = elem[]
         '''self.data['a_bg_color'] = np.random.uniform(0.85, 1.00, (n, 4))
         data['a_fg_color'] = 0, 0, 0, 1
@@ -249,35 +251,28 @@ class Canvas(app.Canvas):
 
         self.translate = 5
         self.program = gloo.Program(vert, frag)
-        self.program['a_position']
+        self.program['a_position'] = ar
         self.view = translate((0, 0, -self.translate))
         self.model = np.eye(4, dtype=np.float32)
         self.projection = np.eye(4, dtype=np.float32)
 
         self.apply_zoom()
-
-        self.program.bind(gloo.VertexBuffer(data))
-        self.program['u_linewidth'] = u_linewidth
-        self.program['u_antialias'] = u_antialias
-        self.program['u_model'] = self.model
-        self.program['u_view'] = self.view
-        self.program['u_size'] = 5 / self.translate
-
         self.theta = 0
         self.phi = 0
 
         gloo.set_state('translucent', clear_color='white')
 
         self.timer = app.Timer('auto', connect=self.on_timer, start=True)
-
         self.show()
-
 
     def drawOutput(self):
         ar = []
+        print(len(model.arrOrganism))
         for elem in model.arrOrganism:
-            ar.append([elem.x, elem.y, elem.z])
-        data['a_position'] = ar
+            ar.append([elem.x, elem.y, 0])
+        #data['a_position'] = ar
+        self.program['a_position'] = ar
+        print(ar)
 
 
     def on_key_press(self, event):
@@ -456,15 +451,6 @@ if __name__ == "__main__":
 
     done = False
     while not done:
-        '''for i in pygame.event.get():
-            if i.type == pygame.QUIT:
-                done = True
-            elif i.type == pygame.MOUSEBUTTONDOWN:
-                if i.button == 1:
-                    makeCircle(pygame.mouse.get_pos(), 'FOOD')
-                else:
-                    makeCircle(pygame.mouse.get_pos(), 'WASTE')'''
-
         for y in range(TrailMap.shape[0]):
             for x in range(TrailMap.shape[1]):
                 if FoodMap[y, x] > 0:
@@ -494,8 +480,6 @@ if __name__ == "__main__":
                 model.arrOrganism.append(Particle(x=point[0], y=point[1], z=point[2], heading=random.randint(0, ANGLE)))
                 Count += 1
                 print(f'--{Count}--')
-
-        pygame.display.set_caption(str(Count) + ' Particles')
 
         # pygame.image.save(screen, 'screens/file-' + str(N) + '.png')
         N += 1   
