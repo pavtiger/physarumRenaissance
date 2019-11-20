@@ -328,18 +328,6 @@ class Canvas(app.Canvas):
 
 class Particle():
     def __init__(self, x, y, heading = random.randint(0, 360)):
-        app.Canvas.__init__(self, keys='interactive', size=(800, 600))
-        ps = self.pixel_scale
-        self.program = gloo.Program(vert, frag)
-        self.apply_zoom()
-        self.program.bind(gloo.VertexBuffer(data))
-        self.program['u_linewidth'] = u_linewidth
-        self.program['u_antialias'] = u_antialias
-        self.program['u_model'] = self.model
-        self.program['u_view'] = self.view
-        self.program['u_size'] = 5 / self.translate
-        gloo.set_state('translucent', clear_color='white')
-
         """Constructor"""
         if QUALITY == 'LOW':
             self.SA = 45
