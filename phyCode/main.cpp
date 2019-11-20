@@ -65,8 +65,16 @@ public: // параметры
     }
 
 
-    void p_rotate() { // повернуться
-        // code
+    void p_rotate(int ans) { // повернуться
+        if (ans[0][1] > 0 or ans[2][1] > 0) {
+            if (ans[0][1] > ans[2][1]) {
+                // turn left
+                heading += 5;
+            } else {
+                // turn right
+                heading -= 5;
+            }
+        }
     }
 
 
