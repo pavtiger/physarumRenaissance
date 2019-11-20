@@ -28,6 +28,41 @@ ANGLE = 360
 K = 0
 
 
+class Modeling():
+    def __init__(self, trsCount=1):
+        self.trsCount = trsCount
+        for item in START_POINT:
+            self.arrOrganism = [Particle(item[0], item[1], item[2]) for i in range(trsCount)]
+
+    def locationUpdate(self, Count):
+        delete = []
+        for a in range(len(self.arrOrganism)):
+            #####
+            elem = self.arrOrganism[a]
+            elem.move()
+            elem.share()
+            ans = elem.sence()
+            elem.rotate(ans)
+            if elem.food >= 0:
+                elem.food -= 0
+            else:
+                delete.append(a)
+            #####
+            # pygame.display.set_caption(f'{str(int(ans[0][1]))} - {str(int(ans[1][1]))} - {str(int(ans[2][1]))}')
+            if elem.x >= 0 and elem.x <= SIZE[0] and elem.y >= 0 and elem.y <= SIZE[1]:
+                TrailMap[int(elem.y), int(elem.x)] += 255
+                if FoodMap[int(elem.y), int(elem.x)] <= 10:
+                    FoodMap[int(elem.y), int(elem.x)] = 0
+            else:
+                delete.append(a)
+
+        for ind in range(len(delete)):
+            del model.arrOrganism[delete[ind]]
+            Count -= 1
+            for i in range(len(delete)):
+                delete[i] -= 1
+
+
 
 vert = """
 #version 120
@@ -192,62 +227,9 @@ void main() {
 
 
 
-class Modeling():
-    def __init__(self, trsCount = 1):
-        self.trsCount = trsCount
-        for item in START_POINT:
-            self.arrOrganism = [Particle(item[0], item[1], item[2]) for i in range(trsCount)]
-
-    def drawOutput(self, screen):
-        for elem in self.arrOrganism:
-            for chek in START_POINT:
-                dx = math.fabs(elem.x - chek[0])
-                dy = math.fabs(elem.y - chek[1])
-                if math[300, 300].sqrt(dx*dx + dy*dy) <= 5:
-                    elem.food = 255
-
-            # Draw particle
-            if QUALITY == 'LOW':
-                pygame.draw.circle(screen, (0 + elem.food, int(55 + elem.food/1.275), int(255 - elem.food/5.1)), (int(elem.x), int(elem.y)), 2, 1)
-            elif QUALITY == 'HIGH':
-                pygame.draw.circle(screen, (0 + elem.food, int(55 + elem.food/1.275), int(255 - elem.food/5.1)), (int(elem.x), int(elem.y)), 0, 0)
-
-    def locationUpdate(self, Count):
-        delete = []
-        for a in range(len(self.arrOrganism)):
-            #####
-            elem = self.arrOrganism[a]
-            elem.move()
-            elem.share()
-            ans = elem.sence()
-            elem.rotate(ans)
-            if elem.food >= 0:
-                elem.food -= 0
-            else:
-                delete.append(a)
-            #####
-            # pygame.display.set_caption(f'{str(int(ans[0][1]))} - {str(int(ans[1][1]))} - {str(int(ans[2][1]))}')
-            if elem.x >= 0 and elem.x <= SIZE[0] and elem.y >= 0 and elem.y <= SIZE[1]:
-                TrailMap[int(elem.y), int(elem.x)] += 255
-                if FoodMap[int(elem.y), int(elem.x)] <= 10:
-                    FoodMap[int(elem.y), int(elem.x)] = 0
-            else:
-                delete.append(a)
-
-        for ind in range(len(delete)):
-            del model.arrOrganism[delete[ind]]
-            Count -= 1
-            for i in range(len(delete)):
-                delete[i] -= 1
-            
-            # print('__deleted__')
-
-
-
 class Canvas(app.Canvas):
 
     def __init__(self):
-        model = Modeling(1)
         app.Canvas.__init__(self, keys='interactive', title='test', size=(800, 600))
         ps = self.pixel_scale
 
@@ -293,6 +275,24 @@ class Canvas(app.Canvas):
 
         self.show()
 
+
+    def drawOutput(self):
+        for elem in model.arrOrganism:
+            for chek in START_POINT:
+                dx = math.fabs(elem.x - chek[0])
+                dy = math.fabs(elem.y - chek[1])
+                if math[300, 300].sqrt(dx * dx + dy * dy) <= 5:
+                    elem.food = 255
+
+            # Draw particle
+            if QUALITY == 'LOW':
+                pygame.draw.circle(screen, (0 + elem.food, int(55 + elem.food / 1.275), int(255 - elem.food / 5.1)),
+                                   (int(elem.x), int(elem.y)), 2, 1)
+            elif QUALITY == 'HIGH':
+                pygame.draw.circle(screen, (0 + elem.food, int(55 + elem.food / 1.275), int(255 - elem.food / 5.1)),
+                                   (int(elem.x), int(elem.y)), 0, 0)
+
+
     def on_key_press(self, event):
         if event.text == ' ':
             if self.timer.running:
@@ -331,6 +331,7 @@ class Canvas(app.Canvas):
         self.program['u_projection'] = self.projection
 
 
+
 class Particle():
     def __init__(self, x, y, z, heading = random.randint(0, 360)):
         """Constructor"""
@@ -355,7 +356,7 @@ class Particle():
             self.SO = 5
             self.SS = 0.5
             self.depT = 5
-            self.pCD = 0 
+            self.pCD = 0
             self.sMin = 0
             self.food = 255
             self.foodTrH = 20
@@ -372,12 +373,12 @@ class Particle():
                     dx = math.fabs(elem.x - self.x)
                     dy = math.fabs(elem.y - self.y)
                     if QUALITY == 'LOW': n = 3
-                    elif QUALITY == 'HIGH': n = 6 
+                    elif QUALITY == 'HIGH': n = 6
                     if math.sqrt(dx*dx + dy*dy) <= n:
                         if elem.food <= 255 - FOOD_EAT and self.food > FOOD_EAT:
                             elem.food += FOOD_EAT
                             self.food -= FOOD_EAT
-    
+
     def test(self, y, x, var):
         var = [FoodMap[y, x], 20] [FoodMap[y, x] > 20]
         FoodMap[y, x] -= var # Transaction
@@ -398,7 +399,7 @@ class Particle():
             self.y += dy
         else:
             print('hello')
-    
+
     def rotate(self, ans):
         if ans[0][1] > 0 or ans[2][1] > 0:
             if ans[0][1] > ans[2][1]:
@@ -464,6 +465,7 @@ class Particle():
 
 
 if __name__ == "__main__":
+    model = Modeling(1)
     c = Canvas()
     app.run()
 
@@ -471,7 +473,6 @@ if __name__ == "__main__":
     Skip = False
     TrailMap = np.zeros((SIZE[1], SIZE[0]))
     FoodMap = np.zeros((SIZE[1], SIZE[0]))
-    # model = Modeling(1)
     Count = 1
 
     def makeCircle(p, type, s = 20):
@@ -515,7 +516,7 @@ if __name__ == "__main__":
 
 
         model.locationUpdate(Count)
-        model.drawOutput(screen)
+        c.drawOutput()
         for elem in START_POINT:
             pygame.draw.circle(screen, (200, 0, 0), (elem[0], elem[1]), 6, 3) # Start Point
 
@@ -524,6 +525,7 @@ if __name__ == "__main__":
             for point in START_POINT:
                 model.arrOrganism.append(Particle(x=point[0], y=point[1], heading=random.randint(0, ANGLE)))
                 Count += 1
+                print(f'--{Count}--')
 
         pygame.display.set_caption(str(Count) + ' Particles')
 
