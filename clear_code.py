@@ -29,6 +29,7 @@ program['a_position'] = np.c_[
 fname = 'teapot.obj'
 fig = plot.Fig()
 fig[0, 0].mesh(*io.read_mesh(fname)[:2])
+fig[1, 0].mesh(*io.read_mesh(fname)[:2])
 ''''''
                                  
 @c.connect
