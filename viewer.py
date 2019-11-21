@@ -15,6 +15,9 @@ from vispy import app, gloo
 from vispy.util.transforms import perspective, translate, rotate
 from vispy.geometry import meshdata as md
 from vispy.geometry import generation as gen
+from vispy.gloo import (Program, VertexBuffer, IndexBuffer, Texture2D, clear,
+                        FrameBuffer, RenderBuffer, set_viewport, set_state)
+
 
 
 TITLE = 'Physarum Polycephalum'
@@ -215,7 +218,10 @@ class Canvas(app.Canvas):
 
         self.program['u_model'] = self.model
         self.program['u_view'] = self.view
-
+        
+        color = Texture2D((512, 512, 3), interpolation='linear')
+        self.framebuffer = FrameBuffer(color, RenderBuffer((512, 512)))
+        
         self.theta = 0
         self.phi = 0
         self.visible = True
@@ -252,21 +258,22 @@ class Canvas(app.Canvas):
     def on_draw(self, event):
         gloo.clear()
         if self.visible:
-            # Filled mesh
+            with self.framebuffer:
+                self.program.bind(gloo.VertexBuffer(self.data1))
+                self.program.draw('points')
+                
             gloo.set_state(blend=False, depth_test=True,
                            polygon_offset_fill=True)
             self.program['u_color'] = 1, 1, 1, 1
-            #self.program.draw('triangles', self.filled_buf)
+            self.program.draw('triangles', self.filled_buf)
             
             gloo.set_state(blend=True, depth_test=True,
                            polygon_offset_fill=False)
             gloo.set_depth_mask(False)
             self.program['u_color'] = 0, 0, 0, 1
-            #self.program.draw('lines', self.outline_buf)
+            self.program.draw('lines', self.outline_buf)
             gloo.set_depth_mask(True)
             
-            self.program.bind(gloo.VertexBuffer(self.data1))
-            self.program.draw('triangles')
 
     # ---------------------------------
     def set_data(self, vertices, filled, outline):

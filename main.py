@@ -22,6 +22,8 @@ def drawOutput(organism):
             elem[2] = elem[2] * 1 + dot[2]
         #print('workin')
     fig[0, 0].mesh(*arr, color=(1, 1, 0.1))
+    
+    vispy.
             
     app.run()
 

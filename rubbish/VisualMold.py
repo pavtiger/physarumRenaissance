@@ -6,7 +6,6 @@ import random
 import numpy as np
 import time
 import math
-#from PIL import Image
 import matplotlib.pyplot as plt
 
 START_POINT = [[0, 0, 0]]
