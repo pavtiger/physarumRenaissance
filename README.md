@@ -1,8 +1,8 @@
 # Physarum Renaissance
-Setup:
+Setup: \n
   pip install --upgrade vispy
-
-
+\n
+\n
 
 p_share()
   share food to closest friends
