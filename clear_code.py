@@ -26,7 +26,6 @@ program['a_position'] = np.c_[
         np.random.uniform(-0.5, +0.5, 1000).astype(np.float32)]
 
 fname = 'teapot.obj' #io.load_data_file('teapot.obj')
-#fname = io.load_data_file('orig/triceratops.obj.gz')
 fig = plot.Fig()
 fig[1, 1].mesh(*io.read_mesh(fname)[:2])
 
