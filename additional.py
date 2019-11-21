@@ -1,3 +1,5 @@
+import numpy as np
+
 class Point():
     def __init__(self, x, y, z):
         self.x = x
@@ -16,8 +18,4 @@ def transmission_matrix(surface, polyhedron):
     C[2, 2] = C[0, 0]*C[1, 1] - C[1, 0]*C[0, 1]
     return C
             
-def space_to_face(self):
-    pass
 
-def face_to_space(self):
-    pass

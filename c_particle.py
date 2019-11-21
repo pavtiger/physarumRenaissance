@@ -1,23 +1,12 @@
-class Point():
-    def __init__(self, x, y, z):
-        self.x = x
-	self.y = y
-	self.z = z
-
-def transmission_matrix(surface, polyhedron):
-    C = np.zeros((3, 3))
-    verA = polyhedron.vertex[surface[0]]
-    verB = polyhedron.vertex[surface[1]]
-    verC = polyhedron.vertex[surface[2]]
-    C[:, 0] = verB - verA
-    C[:, 1] = verC - verA
-    C[0, 2] = C[1, 0]*C[2, 1] - C[2, 0]*C[1, 1]
-    C[1, 2] = C[2, 0]*C[0, 1] - C[0, 0]*C[2, 1]
-    C[2, 2] = C[0, 0]*C[1, 1] - C[1, 0]*C[0, 1]
-    return C
+from additional import transmission_matrix, Point
+    
+class Polyhedron():
+    def __init__(self, verteces, faces):
+        self.verteces = verteces
+        self.faces = faces
 
 class Particle():
-    def __init__(self, x, y, z, heading = random.randint(0, 360), surface):
+    def __init__(self, x, y, z, surface, polyhedron, heading = random.randint(0, 360)):
         """
             Initializing the particle(agent)
             param SA: sensor angle
@@ -45,9 +34,27 @@ class Particle():
     
     def count_step_size(self):
         self.SS = 1
-		
-    def space_to_face(self)
-    
+        
+    def space_to_face(self, p):
+        new_p = Point(0, 0, 0)
+        new_p.x = p.x*self.trans_matrix[0, 0] + \
+                  p.y*self.trans_matrix[0, 1] + \
+                  p.z*self.trans_matrix[0, 2]
+        new_p.y = p.x*self.trans_matrix[1, 0] + \
+                  p.y*self.trans_matrix[1, 1] + \
+                  p.z*self.trans_matrix[1, 2]
+        new_p.z = p.x*self.trans_matrix[2, 0] + \
+                  p.y*self.trans_matrix[2, 1] + \
+                  p.z*self.trans_matrix[2, 2]
+        return new_p
+
+    def face_to_space(self, p):
+        C = np.linalg.inv(self.trans_matrix)
+        new_p = Point(0, 0, 0)
+        new_p.x = p.x*C[0, 0] + p.y*C[0, 1] + p.z*C[0, 2]
+        new_p.y = p.x*C[1, 0] + p.y*C[1, 1] + p.z*C[1, 2]
+        new_p.z = p.x*C[2, 0] + p.y*C[2, 1] + p.z*C[2, 2]
+        return new_p
 
     
     def sense_trail(self, polyhedron, TrailMap):
@@ -55,28 +62,27 @@ class Particle():
         get polyhedron and TrailMap
         return Trail on the rigth and left sensors
         '''
-        # get coords of right sensor on (x,y,0) plain
+       # get coords of right sensor on (x,y,0) plain
         rcoord = space_to_face(self.coord)# project point to (x,y,0) plain 
-        rcoord.x = fcoord.x + SO * np.sin(np.radians(RA + SA))
-        rcoord.y = fcoord.y + SO * np.cos(np.radians(RA + SA))
+        rcoord.x = rcoord.x + SO * np.sin(np.radians(heading + SA))
+        rcoord.y = rcoord.y + SO * np.cos(np.radians(heading + SA))
         
 
         # get coords of left sensor on (x,y,0) plain
         lcoord = space_to_face(self.coord)
-        lcoord.x = lcoord.x + SO * np.sin(np.radians(RA - SA))
-        lcoord.y = lcoord.y + SO * np.cos(np.radians(RA - SA))
+        lcoord.x = lcoord.x + SO * np.sin(np.radians(heading - SA))
+        lcoord.y = lcoord.y + SO * np.cos(np.radians(heading - SA))
 
         # get 3D coord of sensors
-        rsens = face_to_space(Points(rcoord.x, rcoord.y, 0)
-	lsens = face_to_space(Points(lcoord.x, lcoord.y, 0)
-
-	return TrailMap[lsens.x, lsens.y, lsens.z], \
+        rsens = face_to_space(Points(rcoord.x, rcoord.y, 0))
+        lsens = face_to_space(Points(lcoord.x, lcoord.y, 0))
+        
+        return TrailMap[lsens.x, lsens.y, lsens.z], \
                TrailMap[rsens.x, rsens.y, rsens.z]
+        pass
 
-		
-		
-	
-	
-	
-	
-	
+        
+        
+    
+    
+    
