@@ -2,20 +2,18 @@ import numpy as np
 from vispy import app, scene
 from vispy import gloo
 
-c = app.Canvas(keys='interactive')
-#c = scene.SceneCanvas(keys='interactive')
+SIZE = (600, 600)
+TITLE = 'Physarum Polycephalum'
 
+c = app.Canvas(keys='interactive', title=TITLE, size=SIZE)
 vertex = """
 attribute vec2 a_position;
-void main (void)
-{
+void main (void) {
     gl_Position = vec4(a_position, 0.0, 1.0);
 }
 """
-
 fragment = """
-void main()
-{
+void main() {
     gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
 }
 """
@@ -31,7 +29,7 @@ program['a_position'] = np.c_[
 @c.connect
 def on_resize(event):
     gloo.set_viewport(0, 0, *event.size)
-
+    
 @c.connect    
 def on_draw(event):
     gloo.clear((0,0,0,1))
