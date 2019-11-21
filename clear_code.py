@@ -25,10 +25,12 @@ program['a_position'] = np.c_[
         np.random.uniform(-0.5, +0.5, 1000).astype(np.float32),
         np.random.uniform(-0.5, +0.5, 1000).astype(np.float32)]
 
-fname = 'teapot.obj' #io.load_data_file('teapot.obj')
+''''''
+fname = 'teapot.obj'
 fig = plot.Fig()
-fig[1, 1].mesh(*io.read_mesh(fname)[:2])
-
+fig[0, 0].mesh(*io.read_mesh(fname)[:2])
+''''''
+                                 
 @c.connect
 def on_resize(event):
     gloo.set_viewport(0, 0, *event.size)
