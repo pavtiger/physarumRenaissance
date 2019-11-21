@@ -26,10 +26,11 @@ program['a_position'] = np.c_[
         np.random.uniform(-0.5, +0.5, 1000).astype(np.float32)]
 
 ''''''
-fname = 'teapot.obj'
+fname1 = 'teapot.obj'
+fname2 = 'sphere.obj'
 fig = plot.Fig()
-fig[0, 0].mesh(*io.read_mesh(fname)[:2])
-fig[1, 0].mesh(*io.read_mesh(fname)[:2])
+fig[0, 0].mesh(*io.read_mesh(fname1)[:2])
+fig[0, 0].mesh(*io.read_mesh(fname2)[:2])
 ''''''
                                  
 @c.connect
