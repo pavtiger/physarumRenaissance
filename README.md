@@ -1,9 +1,16 @@
 # Physarum Renaissance
-Setup:
+Setup VisPy OpenGL library:
 ```
-  pip install --upgrade vispy
+  pip install vispy
+```
+and one more visualising library:
+```
+  pip install pyqt5
 ```
 
+
+
+class Particle has a few functions for life control:
 ```
 p_share()
 ```
