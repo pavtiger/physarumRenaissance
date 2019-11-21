@@ -30,10 +30,11 @@ program['a_position'] = np.c_[
 def on_resize(event):
     gloo.set_viewport(0, 0, *event.size)
     
-@c.connect    
+@c.connect
 def on_draw(event):
     gloo.clear((0,0,0,1))
     program.draw('points')
 
-c.show()
-app.run()
+if __name__ == "__main__":
+    c.show()
+    app.run()
