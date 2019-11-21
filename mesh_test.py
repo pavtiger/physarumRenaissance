@@ -1,12 +1,13 @@
 import numpy as np
-from vispy import scene
 from vispy import app, io
 import vispy
 
+SIZE = (600, 600)
+TITLE = 'Physarum Polycephalum'
 
-def mesh_viewer(fname, camera="arcball", bgcolor="black"):
+def mesh_viewer(fname, camera="arcball"):
 
-    canvas = scene.SceneCanvas(keys="interactive", show=True, bgcolor=bgcolor)
+    canvas = app.Canvas(keys="interactive", show=True, title=TITLE, size=SIZE)
     view = canvas.central_widget.add_view()
 
     view.camera = camera
@@ -20,7 +21,7 @@ def mesh_viewer(fname, camera="arcball", bgcolor="black"):
 
     fc[:, 3] = 1
     fc[:, 1] = 1
-    mesh = scene.visuals.Mesh(
+    mesh = app.visuals.Mesh(
         vertices=verts, faces=faces, face_colors=fc, vertex_colors=vc, mode="triangles"
     )
     view.add(mesh)
@@ -28,9 +29,4 @@ def mesh_viewer(fname, camera="arcball", bgcolor="black"):
 
 
 fname = "teapot.obj"
-
-#print(vispy.config)
-#print(vispy.version_info)
-#print(vispy.sys_info())
-
 mesh_viewer(fname)
