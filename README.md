@@ -1,5 +1,7 @@
 # Physarum Renaissance
-Inspired by this awesome mork [http://eprints.uwe.ac.uk/15260/1/artl.2010.16.2.pdf]
+Inspired by this [awesome work](http://eprints.uwe.ac.uk/15260/1/artl.2010.16.2.pdf)
+
+### Instalation
 Setup VisPy OpenGL library:
 ```
   pip install vispy
