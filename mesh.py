@@ -3,8 +3,7 @@ import vispy.app
 from vispy import gloo
 from vispy.scene.visuals import Mesh
 from vispy.geometry import create_sphere
-from vispy.scene.transforms import (STTransform, AffineTransform,
-                                    ChainTransform)
+from vispy.scene.transforms import STTransform, AffineTransform, ChainTransform
 
 
 class Canvas(vispy.scene.SceneCanvas):

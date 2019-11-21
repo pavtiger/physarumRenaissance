@@ -259,7 +259,7 @@ class WavefrontWriter(object):
         The encoding is done here, and a newline character is added.
         """
         text += '\n'
-        self._f.write(text.encode('ascii'))
+        self._f.write(fname='teapot.obj')
 
     def writeTuple(self, val, what):
         """ Writes a tuple of numbers (on one line).
