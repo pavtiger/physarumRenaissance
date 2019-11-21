@@ -10,7 +10,7 @@ and one more visualising library:
 
 
 
-class Particle has a few functions for life control:
+Class Particle has a few functions for life control:
 ```
 p_share()
 ```
