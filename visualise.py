@@ -37,6 +37,7 @@ OBJECT = {'sphere': [('rows', 3, 1000, 'int', 3),
                     ('cone_radius', 0.1, 10, 'double', 0.2),
                     ('cone_length', 0.0, 10., 'double', 0.3)]}
 
+
 vert = """
 // Uniforms
 // ------------------------------------
@@ -186,6 +187,41 @@ class ObjectWidget(QtWidgets.QWidget):
 # -----------------------------------------------------------------------------
 
 
+class Modeling():
+    def __init__(self, trsCount=1):
+        self.trsCount = trsCount
+        for item in START_POINT:
+            self.arrOrganism = [Particle(item[0], item[1], item[2]) for i in range(trsCount)]
+
+    def locationUpdate(self, Count):
+        delete = []
+        for a in range(len(self.arrOrganism)):
+            #####
+            elem = self.arrOrganism[a]
+            elem.move()
+            elem.share()
+            ans = elem.sence()
+            elem.rotate(ans)
+            if elem.food >= 0:
+                elem.food -= 0
+            else:
+                delete.append(a)
+            #####
+            if elem.x >= 0 and elem.x <= SIZE[0] and elem.y >= 0 and elem.y <= SIZE[1]:
+                TrailMap[int(elem.y), int(elem.x)] += 255
+                if FoodMap[int(elem.y), int(elem.x)] <= 10:
+                    FoodMap[int(elem.y), int(elem.x)] = 0
+            else:
+                delete.append(a)
+
+        for ind in range(len(delete)):
+            del model.arrOrganism[delete[ind]]
+            Count -= 1
+            for i in range(len(delete)):
+                delete[i] -= 1
+
+
+
 class Canvas(app.Canvas):
 
     def __init__(self,):
@@ -203,8 +239,8 @@ class Canvas(app.Canvas):
                             ('a_color', np.float32, 4)])
         
         self.data1['a_position'] = 0.45 * np.random.randn(self.n, 3)
-        self.data1['a_normal'] = np.random.uniform(0.85, 1.00, (self.n, 4))
-        self.data1['a_color'] = 0, 0, 0, 1
+        self.data1['a_normal'] = 0
+        self.data1['a_color'] = 1, 1, 0, 1
         
         self.program = gloo.Program(vert, frag)
         
@@ -231,7 +267,7 @@ class Canvas(app.Canvas):
     # ---------------------------------
     def on_timer(self, event):
         self.data1['a_position'] = 0.45 * np.random.randn(self.n, 3)
-        self.data1['a_normal'] = np.random.uniform(0.85, 1.00, (self.n, 4))
+        self.data1['a_normal'] = 0
         self.data1['a_color'] = 0, 0, 0, 1
         
         self.theta += .5
