@@ -6,6 +6,10 @@ After a short break we decided to resume the thread, and write a fully new code 
 
 ![Screenshot](file-535.png)
 
+This model is also availible with food - 
+![Screenshot](smallGrowth.gif)
+Green spot - food, black particles - physarum
+
 ### Instalation
 Setup VisPy OpenGL library:
 ```
