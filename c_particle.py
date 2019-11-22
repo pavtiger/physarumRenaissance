@@ -84,15 +84,62 @@ class Particle():
             self.lsens, self.rsens = self.rsens, self.lsens
                       
     
-    def sense_trail(self, TrailMap):
+    def sense_trail(self, TrailMap, FoodMap):
         """
-        get polyhedron and TrailMap
-        return Trail on the rigth and left sensors
-        """
-        
-        return TrailMap[self.lsens[0], self.lsens[1], self.lsens[2]], \
-               TrailMap[self.csens[0], self.csens[1], self.csens[2]], \
-               TrailMap[self.rsens[0], self.rsens[1], self.rsens[2]]
+        get TrailMap and FoodMap
+        return Trail and Food on the rigth and left sensors
+        """        
+        return np.array([[TrailMap[round(self.lsens[0]), round(self.lsens[1]), round(self.lsens[2])], \
+               TrailMap[round(self.csens[0]), round(self.csens[1]), round(self.csens[2])], \
+               TrailMap[round(self.rsens[0]), round(self.rsens[1]), round(self.rsens[2])]], 
+               [FoodMap[round(self.lsens[0]), round(self.lsens[1]), round(self.lsens[2])], \
+               FoodMap[round(self.csens[0]), round(self.csens[1]), round(self.csens[2])], \
+               FoodMap[round(self.rsens[0]), round(self.rsens[1]), round(self.rsens[2])]]])
+               
+    def rotate_all_sensors(self, sense):
+        heading = 0
+        #turn according to food
+        if sense[0, 1] > 0 or sense[2, 1] > 0:
+            if sense[0, 1] > sense[2, 1]:
+                # turn left
+                heading += 5
+            else:
+                # turn right
+                heading -= 5
+
+        rand = random.randint(0, 15)
+        if rand == 1:
+            # turn randomly
+            r = random.randint(0, 1)
+            if r == 0:
+                heading += self.RA
+            else:
+                heading -= self.RA
+        else:
+            if sense[1, 0] >= sense[0, 0] and sense[1, 0] >= sense[2, 0]:
+                pass
+            elif sense[1, 0] < sense[0, 0] and sense[1, 0] < sense[2, 0]:
+                # turn randomly
+                r = random.randint(0, 1)
+                if r == 0:
+                    heading += self.RA
+                else:
+                    heading -= self.RA
+            elif sense[0, 0] >= sense[1, 0] and sense[0, 0] >= sense[2, 0]:
+                # turn left
+                heading += self.RA
+            elif sense[2, 0] >= sense[1][0] and sense[2, 0] >= sense[0, 0]:
+                # turn right
+                heading -= self.RA
+                
+        n = np.cross(self.lsens - self.coord, self.rsens - self.coord)
+        n = n/get_distance(n, np.zeros((1, 3)))         
+        p = self.lsens - self.coord
+        self.lsens = self.rotate_point_angle(n, p, heading)
+        p = self.csens - self.coord
+        self.csens = self.rotate_point_angle(n, p, heading)
+        p = self.rsens - self.coord
+        self.rsens = self.rotate_point_angle(n, p, heading)
                
     def move_all_agent_coordinates(self):
         """
@@ -119,6 +166,8 @@ class Particle():
 
     
 if __name__ == "__main__":
+    TrailMap = np.zeros((100, 100, 100))
+    FoodMap = np.zeros((100, 100, 100))
     triangle = Polyhedron(verteces = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), faces = [0, 1, 2])
     surface = [0, 1, 2]
     part = Particle(1.0, 1.0, 0, surface, triangle)
@@ -126,6 +175,7 @@ if __name__ == "__main__":
     fig = plt.figure()
     ax = plt.axes(projection='3d')
 
-    for i in range(0, 10):
+    for i in range(0, 5):
         part.simple_visualizing(ax)
+        part.rotate_all_sensors(part.sense_trail(TrailMap, FoodMap))
     plt.show()
