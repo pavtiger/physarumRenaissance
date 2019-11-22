@@ -4,7 +4,7 @@ After a short break we decided to resume the thread, and write a fully new code 
 * Try watching [full version](http://eprints.uwe.ac.uk/15260/1/artl.2010.16.2.pdf) 
 * Or see a github [repo](https://github.com/nicoptere/physarum) 
 
-![Alt text](images/file353.png?raw=true "Title")
+![Screenshot](file353.png)
 
 ### Instalation
 Setup VisPy OpenGL library:
