@@ -6,13 +6,13 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
     
 class Polyhedron():
-    def __init__(self, verteces, edges, faces):
-        self.verteces = verteces
+    def __init__(self, vertices, edges, faces):
+        self.vertices = vertices
         self.faces = faces
         self.edges = edges
 
 class Particle():   
-    def __init__(self, x, y, z, surface, verteces, edges, faces):
+    def __init__(self, x, y, z, surface, vertices, edges, faces):
         """
             Initializing the particle(agent):
             param SA: sensor angle
@@ -36,10 +36,10 @@ class Particle():
         self.foodTrH = 20
         self.coord = np.array([x, y, z])
         self.surface = surface
-        self.polyhedron = Polyhedra(verteces, edges, faces)
+        self.polyhedron = Polyhedron(vertices, edges, faces)
         self.trail = np.zeros((self.depT, 3))
-        self.trans_matrix = np.array(transmission_matrix(surface, polyhedron))
-        vert = np.asarray(polyhedron.verteces[surface[0]])
+        self.trans_matrix = np.array(transmission_matrix(surface, self.polyhedron))
+        vert = np.asarray(self.polyhedron.vertices[surface[0]])
         self.csens = self.coord + (vert - self.coord)/get_distance(vert, self.coord)*self.SO
         
     
@@ -86,8 +86,8 @@ class Particle():
         """
         Initializing lsens and rsens after full init using csens
         """
-        n = np.cross(self.polyhedron.verteces[surface[1]] - self.polyhedron.verteces[surface[0]], \
-                     self.polyhedron.verteces[surface[2]] - self.polyhedron.verteces[surface[0]])
+        n = np.cross(self.polyhedron.vertices[surface[1]] - self.polyhedron.vertices[surface[0]], \
+                     self.polyhedron.vertices[surface[2]] - self.polyhedron.vertices[surface[0]])
         n = n/get_distance(n, np.zeros((1, 3)))         
         p = self.csens - self.coord
         self.lsens = self.rotate_point_angle(n, p, self.SA)
@@ -190,9 +190,9 @@ class Particle():
 if __name__ == "__main__":
     TrailMap = np.zeros((100, 100, 100))
     FoodMap = np.zeros((100, 100, 100))
-    triangle = Polyhedron(verteces = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), edges = [ faces = [0, 1, 2])
+    triangle = Polyhedron(vertices = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), edges = [], faces = [0, 1, 2])
     surface = [0, 1, 2]
-    part = Particle(1.0, 1.0, 0, surface, triangle)
+    part = Particle(1.0, 1.0, 0, surface, triangle.vertices, triangle.edges, triangle.faces)
     part.init_sensors_from_center()
     fig = plt.figure()
     ax = plt.axes(projection='3d')
