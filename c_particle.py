@@ -194,7 +194,7 @@ if __name__ == "__main__":
     FoodMap = np.zeros((100, 100, 100))
     triangle = Polyhedron(vertices = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), edges = [], faces = [0, 1, 2])
     surface = [0, 1, 2]
-    part = Particle(1., 1., 0., surface, triangle.vertices, triangle.edges, triangle.faces)
+    part = Particle(0., 0., 0., surface, triangle.vertices, triangle.edges, triangle.faces)
     part.init_sensors_from_center()
     fig = plt.figure()
     ax = plt.axes(projection='3d')
