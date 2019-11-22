@@ -5,10 +5,11 @@ After a short break we decided to resume the thread, and write a fully new code 
 * Or see a github [repo](https://github.com/nicoptere/physarum) 
 
 ![Screenshot](file-535.png)
-
+---
 This model is also availible with food - 
-![Screenshot](smallGrowth.gif)
 Green spot - food, black particles - physarum
+![Screenshot](smallGrowth.gif)
+
 
 ### Instalation
 Setup VisPy OpenGL library:
