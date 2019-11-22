@@ -6,23 +6,26 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
     
 class Polyhedron():
-    def __init__(self, verteces, faces):
+    def __init__(self, verteces, edges, faces):
         self.verteces = verteces
         self.faces = faces
+        self.edges = edges
 
 class Particle():   
-    def __init__(self, x, y, z, surface, polyhedron):
+    def __init__(self, x, y, z, surface, verteces, edges, faces):
         """
-            Initializing the particle(agent)
+            Initializing the particle(agent):
             param SA: sensor angle
             param RA: rotation angle of angle
             param SO: sensor distance 
             param SS: agent's step size
             param depT: trail distance
-            param x, y, z: agent's coordinates
-            param heading: agent's angle relative to its surface
+            param coord = [x, y, z]: agent's coordinates
             param surface: 3 vertexes of polyhedron
-            param trails: array with trail's coordinates
+            param trail: array with trail's coordinates
+            param trans_matrix:
+            param lsens, csenc, rsens:
+            param polyhedron:
         """
         self.SA = 45
         self.RA = 20
@@ -33,8 +36,8 @@ class Particle():
         self.foodTrH = 20
         self.coord = np.array([x, y, z])
         self.surface = surface
-        self.polyhedron = polyhedron
-        self.trail = np.zeros((5, 2))
+        self.polyhedron = Polyhedra(verteces, edges, faces)
+        self.trail = np.zeros((self.depT, 3))
         self.trans_matrix = np.array(transmission_matrix(surface, polyhedron))
         vert = np.asarray(polyhedron.verteces[surface[0]])
         self.csens = self.coord + (vert - self.coord)/get_distance(vert, self.coord)*self.SO
@@ -56,6 +59,16 @@ class Particle():
         """
         C = np.linalg.inv(self.trans_matrix)
         return C @ p + self.coord
+        
+    def eat(self, FoodMap):
+        """
+        eat food on agent's coord
+        """
+        if FoodMap[self.coord[0], self.coord[1], self.coord[2]] > 0:
+            FoodMap[self.coord[0], self.coord[1], self.coord[2]] -= 1
+            self.food += 1
+        return FoodMap
+        
     
     def rotate_point_angle(self, n, p, angle):
         """
@@ -177,7 +190,7 @@ class Particle():
 if __name__ == "__main__":
     TrailMap = np.zeros((100, 100, 100))
     FoodMap = np.zeros((100, 100, 100))
-    triangle = Polyhedron(verteces = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), faces = [0, 1, 2])
+    triangle = Polyhedron(verteces = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), edges = [ faces = [0, 1, 2])
     surface = [0, 1, 2]
     part = Particle(1.0, 1.0, 0, surface, triangle)
     part.init_sensors_from_center()
