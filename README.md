@@ -7,8 +7,9 @@ After a short break we decided to resume the thread, and write a fully new code 
 ![Screenshot](file-535.png)
 ---
 This model is also availible with food.
-Green spot - food, black particles - physarum.
+Green spots - food, black particles - physarum.
 ![Screenshot](smallGrowth.gif)
+---
 
 
 ### Instalation
