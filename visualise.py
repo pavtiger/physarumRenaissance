@@ -197,17 +197,16 @@ class Canvas(app.Canvas):
         width, height = self.size
         self.aspect = width / float(height)
 
-        n = 10000
-        self.data1 = np.zeros(n, [('a_position', np.float32, 3),
+        self.n = 10000
+        self.data1 = np.zeros(self.n, [('a_position', np.float32, 3),
                             ('a_normal', np.float32, 4),
                             ('a_color', np.float32, 4)])
         
-        self.data1['a_position'] = 0.45 * np.random.randn(n, 3)
-        self.data1['a_normal'] = np.random.uniform(0.85, 1.00, (n, 4))
+        self.data1['a_position'] = 0.45 * np.random.randn(self.n, 3)
+        self.data1['a_normal'] = np.random.uniform(0.85, 1.00, (self.n, 4))
         self.data1['a_color'] = 0, 0, 0, 1
         
         self.program = gloo.Program(vert, frag)
-        #self.program.bind(gloo.VertexBuffer(self.data1))
         
         self.model = np.eye(4, dtype=np.float32)
         self.projection = np.eye(4, dtype=np.float32)
@@ -231,6 +230,10 @@ class Canvas(app.Canvas):
 
     # ---------------------------------
     def on_timer(self, event):
+        self.data1['a_position'] = 0.45 * np.random.randn(self.n, 3)
+        self.data1['a_normal'] = np.random.uniform(0.85, 1.00, (self.n, 4))
+        self.data1['a_color'] = 0, 0, 0, 1
+        
         self.theta += .5
         self.phi += .5
         self.model = np.dot(rotate(self.theta, (0, 0, 1)),
@@ -252,10 +255,8 @@ class Canvas(app.Canvas):
     def on_draw(self, event):
         gloo.clear()
         if self.visible:
-            #savee = self.filled_buf
             self.program.bind(gloo.VertexBuffer(self.data1))
             self.program.draw('points')
-            #self.program.bind(gloo.VertexBuffer(savee))
             
             self.program.bind(self.vertices_buff)
             gloo.set_state(blend=False, depth_test=True,
@@ -276,7 +277,6 @@ class Canvas(app.Canvas):
         self.filled_buf = gloo.IndexBuffer(filled)
         self.outline_buf = gloo.IndexBuffer(outline)
         self.vertices_buff = gloo.VertexBuffer(vertices)
-        #self.organism_buff = gloo.VertexBuffer(vertices)
         self.update()
 # -----------------------------------------------------------------------------
 
