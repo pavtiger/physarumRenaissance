@@ -26,8 +26,8 @@ class Particle():
         """
         self.SA = 45
         self.RA = 20
-        self.SO = 2
-        self.SS = 2
+        self.SO = 0.001
+        self.SS = 0.001
         self.depT = 5
         self.food = 255
         self.foodTrH = 20
@@ -89,18 +89,27 @@ class Particle():
         get TrailMap and FoodMap
         return Trail and Food on the rigth and left sensors
         """        
-        return np.array([[TrailMap[round(self.lsens[0]), round(self.lsens[1]), round(self.lsens[2])], \
-               TrailMap[round(self.csens[0]), round(self.csens[1]), round(self.csens[2])], \
-               TrailMap[round(self.rsens[0]), round(self.rsens[1]), round(self.rsens[2])]], 
-               [FoodMap[round(self.lsens[0]), round(self.lsens[1]), round(self.lsens[2])], \
-               FoodMap[round(self.csens[0]), round(self.csens[1]), round(self.csens[2])], \
-               FoodMap[round(self.rsens[0]), round(self.rsens[1]), round(self.rsens[2])]]])
+        trail_map_dim = TrailMap.shape[0]
+        ls = np.array([0, 0, 0])
+        cs = np.array([0, 0, 0])
+        rs = np.array([0, 0, 0])
+        for i in range(0, 3):
+            ls[i] = int((self.lsens[i] + 1)*(trail_map_dim-1) / 2)
+            cs[i] = int((self.csens[i] + 1)*(trail_map_dim-1) / 2)
+            rs[i] = int((self.rsens[i] + 1)*(trail_map_dim-1) / 2)
+        print(ls, cs, rs)
+        return np.array([[TrailMap[ls[0], ls[1], ls[2]], \
+                          TrailMap[cs[0], cs[1], cs[2]], \
+                          TrailMap[rs[0], rs[1], rs[2]]],
+                         [FoodMap[ls[0], ls[1], ls[2]], \
+                          FoodMap[cs[0], cs[1], cs[2]], \
+                          FoodMap[rs[0], rs[1], rs[2]]]])
                
     def rotate_all_sensors(self, sense):
         heading = 0
         #turn according to food
-        if sense[0, 1] > 0 or sense[2, 1] > 0:
-            if sense[0, 1] > sense[2, 1]:
+        if sense[1, 0] > 0 or sense[1, 2] > 0:
+            if sense[1, 0] > sense[1, 2]:
                 # turn left
                 heading += 5
             else:
@@ -116,19 +125,19 @@ class Particle():
             else:
                 heading -= self.RA
         else:
-            if sense[1, 0] >= sense[0, 0] and sense[1, 0] >= sense[2, 0]:
+            if sense[0, 1] >= sense[0, 0] and sense[0, 1] >= sense[0, 2]:
                 pass
-            elif sense[1, 0] < sense[0, 0] and sense[1, 0] < sense[2, 0]:
+            elif sense[0, 1] < sense[0, 0] and sense[0, 1] < sense[0, 2]:
                 # turn randomly
                 r = random.randint(0, 1)
                 if r == 0:
                     heading += self.RA
                 else:
                     heading -= self.RA
-            elif sense[0, 0] >= sense[1, 0] and sense[0, 0] >= sense[2, 0]:
+            elif sense[0, 0] >= sense[0, 1] and sense[0, 0] >= sense[0, 2]:
                 # turn left
                 heading += self.RA
-            elif sense[2, 0] >= sense[1][0] and sense[2, 0] >= sense[0, 0]:
+            elif sense[0, 2] >= sense[0, 1] and sense[0, 2] >= sense[0, 0]:
                 # turn right
                 heading -= self.RA
                 
