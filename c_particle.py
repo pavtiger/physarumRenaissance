@@ -41,6 +41,8 @@ class Particle():
         self.trans_matrix = np.array(transmission_matrix(surface, self.polyhedron))
         vert = np.asarray(self.polyhedron.vertices[surface[0]])
         self.csens = self.coord + (vert - self.coord)/get_distance(vert, self.coord)*self.SO
+        self.lsens = 0
+        self.rsens = 0
         
     
     def count_step_size(self):
@@ -192,7 +194,7 @@ if __name__ == "__main__":
     FoodMap = np.zeros((100, 100, 100))
     triangle = Polyhedron(vertices = np.array([[0, 0, 0], [0, 2., 0], [2., 0, 0]]), edges = [], faces = [0, 1, 2])
     surface = [0, 1, 2]
-    part = Particle(1.0, 1.0, 0, surface, triangle.vertices, triangle.edges, triangle.faces)
+    part = Particle(0., 0., 0., surface, triangle.vertices, triangle.edges, triangle.faces)
     part.init_sensors_from_center()
     fig = plt.figure()
     ax = plt.axes(projection='3d')
