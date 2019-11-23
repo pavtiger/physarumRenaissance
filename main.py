@@ -191,10 +191,12 @@ class ObjectWidget(QtWidgets.QWidget):
 
 
 class Modeling():
-    def __init__(self, surface, verteces, edges, faces, trsCount=1):
+    def __init__(self, v, e, f, trsCount=1):
         self.trsCount = trsCount
         for item in START_POINT:
-            self.arrOrganism = [Particle(item[0], item[1], item[2], vertices=vertices, faces=faces, edges=edges) for i in range(trsCount)]
+            surface = np.array([1, 2, 3])
+            #self.arrOrganism = [Particle(item[0], item[1], item[2], surface, vertices=v, faces=f, edges=e) for i in range(trsCount)]
+            print(v)
 
     def locationUpdate(self, Count):
         delete = []
@@ -271,9 +273,12 @@ class Canvas(app.Canvas):
     def on_timer(self, event):
         for i in range(LENGH):
             for point in START_POINT:
-                model.arrOrganism.append(Particle(x=point[0], y=point[1], z=point[2], heading=random.randint(0, ANGLE)))
+                #cl_particle = Particle(x=point[0], y=point[1], z=point[2], vertices=self.vertices_buff, faces=self.filled_buf, edges=self.outline_buf)
+                #model.arrOrganism.append([cl_particle.x(), cl_particle.y(), cl_particle,z()])
+                #Canvas.data1.append([cl_particle.x(), cl_particle.y(), cl_particle,z()])
                 Count += 1
-        self.data1['a_position'] = 0.45 * np.random.randn(self.n, 3)
+
+        self.data1['a_position'] = []
         self.data1['a_normal'] = 0
         self.data1['a_color'] = 0, 0, 0, 1
         
@@ -283,7 +288,7 @@ class Canvas(app.Canvas):
                             rotate(self.phi, (0, 1, 0)))
         self.program['u_model'] = self.model
         self.update()
-
+        
     # ---------------------------------
     def on_resize(self, event):
         width, height = event.size
@@ -318,10 +323,10 @@ class Canvas(app.Canvas):
     # ---------------------------------
     def set_data(self, vertices, filled, outline):
         print('2')
-        model = Modeling(1, vertices_buff, outline_buf, filled_buf)
         self.filled_buf = gloo.IndexBuffer(filled)
         self.outline_buf = gloo.IndexBuffer(outline)
         self.vertices_buff = gloo.VertexBuffer(vertices)
+        model = Modeling(1, vertices, outline, filled)
         self.update()
 # -----------------------------------------------------------------------------
 

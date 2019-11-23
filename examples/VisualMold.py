@@ -53,7 +53,8 @@ class Modeling():
                 if FoodMap[int(elem.y), int(elem.x)] <= 10:
                     FoodMap[int(elem.y), int(elem.x)] = 0
             else:
-                delete.append(a)
+                delete.append(
+a)
 
         for ind in range(len(delete)):
             del model.arrOrganism[delete[ind]]
