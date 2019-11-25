@@ -6,6 +6,4 @@
 
 > Site with [selection](https://www.sagejenson.com/physarum) from last article
 
-> [Introduction](https://www.codecademy.com/learn/introduction-to-javascript) to Javascript
-
 > My summer school [presentation]()
