@@ -3,6 +3,7 @@ After a short break we decided to resume the thread, and write *a fully new code
 * Inspired by this [awesome work](https://www.sagejenson.com/physarum) 
 * Consider reading [full version](http://eprints.uwe.ac.uk/15260/1/artl.2010.16.2.pdf) 
 * Or see a github [repo](https://github.com/nicoptere/physarum) 
+* https://vk.com/doc2051067_510754815?hash=6340d9dab83513a13a&dl=a248f8b54b9a5b7b4c
 
 ![Screenshot](file-535.png)
 ---
